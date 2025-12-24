@@ -59,10 +59,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 EMBED_PATH = os.path.join(
     BASE_DIR,
-    "..",
     "embeddings",
     "face_embeddings.pkl"
 )
+
 
 with open(EMBED_PATH, "rb") as f:
     data = pickle.load(f)
@@ -114,3 +114,4 @@ def recognize_face(image_path):
         return "Unknown"
 
     return identity
+
