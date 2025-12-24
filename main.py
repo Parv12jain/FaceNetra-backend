@@ -51,13 +51,18 @@ async def recognize(file: UploadFile = File(...)):
     try:
         file_path = f"/tmp/{file.filename}"
 
+        contents = await file.read()
+        if not contents:
+            return {"error": "Empty file uploaded"}
+
         with open(file_path, "wb") as f:
-            f.write(await file.read())
+            f.write(contents)
 
         result = recognize_face(file_path)
-
         return {"result": result}
 
     except Exception as e:
         return {"error": str(e)}
+)}
+
 
