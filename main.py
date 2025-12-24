@@ -48,13 +48,16 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @app.post("/recognize")
 async def recognize(file: UploadFile = File(...)):
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    try:
+        file_path = f"/tmp/{file.filename}"
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        with open(file_path, "wb") as f:
+            f.write(await file.read())
 
-    result = recognize_face(file_path)
+        result = recognize_face(file_path)
 
-    os.remove(file_path)
+        return {"result": result}
 
-    return {"result": result}
+    except Exception as e:
+        return {"error": str(e)}
+
