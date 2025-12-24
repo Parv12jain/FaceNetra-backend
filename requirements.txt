@@ -5,4 +5,5 @@ mtcnn
 keras-facenet
 tensorflow
 numpy
+scipy
 python-multipart
