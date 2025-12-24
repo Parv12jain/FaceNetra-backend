@@ -79,7 +79,7 @@ def recognize_face(image_path):
     img = cv2.imread(image_path)
 
     if img is None:
-        return "Invalid image"
+        return "Invalid image file"
 
     rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     faces = detector.detect_faces(rgb)
@@ -88,10 +88,8 @@ def recognize_face(image_path):
         return "No face detected"
 
     x, y, w, h = faces[0]["box"]
-
-    # Fix negative coordinates
     x, y = max(0, x), max(0, y)
-    face = rgb[y:y + h, x:x + w]
+    face = rgb[y:y+h, x:x+w]
 
     if face.size == 0:
         return "Face crop failed"
@@ -102,16 +100,10 @@ def recognize_face(image_path):
     min_dist = float("inf")
     identity = "Unknown"
 
-    THRESHOLD = 0.9
-
     for name, emb in known_embeddings.items():
         dist = np.linalg.norm(emb - embedding)
         if dist < min_dist:
             min_dist = dist
             identity = name
 
-    if min_dist > THRESHOLD:
-        return "Unknown"
-
     return identity
-
